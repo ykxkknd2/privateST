@@ -5,13 +5,6 @@
  */
 const NODE_ENV = process.env.NODE_ENV;
 
-/**
- * TokenKey：                    登录token的命名
- * UserIdKey：                   登录用户的id
- */
-const TokenKey = 'vipcode-token';
-const UserIdKey = 'vipcode-userId';
-const UserCodeKey = 'vipcode-userCode';
 
 /*-------------------------------------------------环境参数----------------------------------------------------------*/
 
@@ -23,28 +16,14 @@ const UserCodeKey = 'vipcode-userCode';
  * AUTH_API:                      权限相关接口
  */
 const EnvironmentOption = NODE_ENV === 'development' ? {
-  BASE_API: 'http://test-sso.i.vipcode.com/api',
-  TokenDomain: 'localhost',
-  AUTH_API: 'http://test-auth.i.vipcode.com/service/api',
-  Msg_API: 'http://test.api.agserver.i.vipcode.com/'
+  BASE_API: 'http://api.kcode.bkuu.com'
 } : NODE_ENV === 'test' ? {
-  BASE_API: 'http://test-sso.i.vipcode.com/api',
-  TokenDomain: 'i.vipcode.com',
-  AUTH_API: 'http://test-auth.i.vipcode.com/service/api',
-  Msg_API: 'http://test.api.agserver.i.vipcode.com/'
+  BASE_API: 'http://api.kcode.bkuu.com'
 } : {
-  BASE_API: 'http://sso.i.vipcode.com/api',
-  TokenDomain: 'i.vipcode.com',
-  AUTH_API: 'http://auth.i.vipcode.com/service/api',
-  Msg_API: 'http://api.agserver.i.vipcode.com/'
+  BASE_API: 'http://api.kcode.bkuu.com'
 };
-
-
 
 module.exports = {
   NODE_ENV,
-  TokenKey,
-  UserIdKey,
-  UserCodeKey,
   EnvironmentOption
 };

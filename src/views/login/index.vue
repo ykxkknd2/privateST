@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <Form class="login-form" ref="loginForm" :model="loginForm" :rules="loginRules">
-      <h3 class="title">请登录呢教师账号</h3>
+      <h3 class="title">请登录教师账号</h3>
       <FormItem prop="username">
         <Input type="text" v-model="loginForm.username" name="userName" auto-complete="on" placeholder="请输入用户名">
         <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -25,7 +25,9 @@
 </template>
 
 <script>
-
+import { Message } from 'iview'
+import request from '@/utils/request';
+import { setToken } from '@/utils/lib';
 
 export default {
   name: 'Login',
@@ -40,12 +42,6 @@ export default {
         password: [{ required: true, trigger: 'blur', message: '请输入密码'}]
       },
       loading: false,
-      redirect: undefined
-    }
-  },
-  computed: {
-    userType: function(){
-      return /loginTeacher/.test(this.$route.path)? '教师' : '学生'
     }
   },
   methods: {
@@ -53,13 +49,32 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false;
-            //  登录成功
-            this.$router.push({ path: '/platform' })
-          }).catch(() => {
-            this.loading = false
+          request.post(`/User/login`, {
+            account: this.loginForm.username,
+            password: this.loginForm.password
           })
+          .then((res)=>{
+            this.loading = false;
+            if(res.code != 0){
+              Message.error(res.message);
+              return;
+            }
+
+            setToken(res.data.token);
+            this.$router.push({ path: '/teacherCurr' })
+          })
+          .catch(()=>{
+            this.loading = false;
+            Message.error('登录失败，请稍后再试');
+          });
+
+          // this.$store.dispatch('Login', this.loginForm).then(() => {
+          //   this.loading = false;
+          //   //  登录成功
+          //   this.$router.push({ path: '/platform' })
+          // }).catch(() => {
+          //   this.loading = false
+          // })
         } else {
           return false
         }
